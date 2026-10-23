@@ -125,24 +125,13 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWith
 import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ===== DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (lấy ở Firebase → Project settings → Your apps) ===== */
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAAwPG5CKFB7QSJDOAipb7a4Eb_zRhOkRQ",
   authDomain: "accclone.firebaseapp.com",
-  databaseURL: "https://accclone-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "accclone",
   storageBucket: "accclone.firebasestorage.app",
   messagingSenderId: "62295737142",
   appId: "1:62295737142:web:accc3446afc87599c06997"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 };
 /* ============================================================================================ */
 
