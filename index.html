@@ -69,7 +69,9 @@ label{display:block;font-size:14px;font-weight:500;margin:10px 0 4px}
     <div class="btns">
       <button class="primary" id="a-go">Đăng nhập</button>
       <button id="a-google">Đăng nhập bằng Google</button>
+      <button id="a-anon">Dùng thử ẩn danh (không cần đăng ký)</button>
     </div>
+    <p class="sub" style="margin:12px 0 0;font-size:13px">Tài khoản ẩn danh chỉ gắn với trình duyệt này. Xóa dữ liệu trình duyệt hoặc đổi máy sẽ mất dữ liệu, hãy bấm Xuất file để sao lưu.</p>
     <p style="margin:14px 0 0;font-size:14px"><span id="a-q">Chưa có tài khoản?</span> <button class="link" id="a-switch">Đăng ký</button></p>
   </section>
 
@@ -119,7 +121,7 @@ label{display:block;font-size:14px;font-weight:500;margin:10px 0 4px}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ===== DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (lấy ở Firebase → Project settings → Your apps) ===== */
@@ -151,7 +153,7 @@ else{
   onAuthStateChanged(auth, user=>{
     if(unsub){unsub();unsub=null}
     if(user){
-      uid=user.uid; $("auth").hidden=true; $("app").hidden=false; $("who").textContent=user.email||"";
+      uid=user.uid; $("auth").hidden=true; $("app").hidden=false; $("who").textContent=user.isAnonymous?"Tài khoản ẩn danh (chỉ lưu trên trình duyệt này)":(user.email||"");
       unsub=onSnapshot(collection(db,"users",uid,"accounts"), snap=>{
         accounts=snap.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         render();
@@ -171,7 +173,10 @@ $("a-go").onclick=async()=>{
   try{registerMode?await createUserWithEmailAndPassword(auth,e,p):await signInWithEmailAndPassword(auth,e,p)}catch(x){$("a-err").textContent=authError(x)}};
 $("a-pass").onkeydown=e=>{if(e.key==="Enter")$("a-go").click()};
 $("a-google").onclick=async()=>{$("a-err").textContent="";try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(x){$("a-err").textContent=authError(x)}};
-$("out").onclick=()=>signOut(auth);
+$("a-anon").onclick=async()=>{$("a-err").textContent="";try{await signInAnonymously(auth)}catch(x){$("a-err").textContent=authError(x)}};
+$("out").onclick=()=>{
+  if(auth.currentUser&&auth.currentUser.isAnonymous&&!confirm("Bạn đang dùng tài khoản ẩn danh. Đăng xuất sẽ MẤT quyền truy cập dữ liệu này. Hãy Xuất file trước. Vẫn đăng xuất?"))return;
+  signOut(auth)};
 
 /* Danh sách */
 function render(){
