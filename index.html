@@ -6,12 +6,9 @@
 <title>Kho tài khoản Liên Quân</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap">
 <style>
-:root{--bg:#f4f1f8;--card:#fff;--ink:#1c1733;--mute:#6b6585;--line:#ddd7ea;--accent:#5b3fd1;--accent-ink:#fff;--gold:#b8860b;--danger:#c2263d;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15112a;--card:#1f1a3a;--ink:#f0ecff;--mute:#a49dc4;--line:#322b58;--accent:#9b85ff;--accent-ink:#15112a;--gold:#f0c24b;--danger:#ff7088}}
-:root[data-theme="dark"]{--bg:#15112a;--card:#1f1a3a;--ink:#f0ecff;--mute:#a49dc4;--line:#322b58;--accent:#9b85ff;--accent-ink:#15112a;--gold:#f0c24b;--danger:#ff7088}
+:root{--bg:#f4f1f8;--card:#fff;--ink:#1c1733;--mute:#6b6585;--line:#ddd7ea;--accent:#5b3fd1;--accent-ink:#fff;--gold:#b8860b;--danger:#c2263d}
+@media (prefers-color-scheme:dark){:root{--bg:#15112a;--card:#1f1a3a;--ink:#f0ecff;--mute:#a49dc4;--line:#322b58;--accent:#9b85ff;--accent-ink:#15112a;--gold:#f0c24b;--danger:#ff7088}}
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
 main{max-width:920px;margin:0 auto;padding:24px 16px 64px}
 h1{font-size:clamp(28px,6vw,44px);font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
@@ -20,11 +17,13 @@ h1{font-size:clamp(28px,6vw,44px);font-weight:800;margin:0 0 4px;letter-spacing:
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
 input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.bar input{flex:1 1 200px;width:auto}
+.bar input[type=search]{flex:1 1 200px;width:auto}
 button{font:inherit;font-weight:500;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px}
 button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
 button.danger{color:var(--danger)}
 button.small{padding:5px 10px;font-size:13px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.who{color:var(--mute);font-size:14px;word-break:break-all}
 .list{display:grid;gap:12px}
 .acc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
 .acc header{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
@@ -37,32 +36,56 @@ button.small{padding:5px 10px;font-size:13px}
 .note{font-size:14px;margin:8px 0 0;white-space:pre-wrap}
 .acts{display:flex;gap:6px;margin-top:12px}
 .empty{text-align:center;color:var(--mute);padding:40px 16px;border:1px dashed var(--line);border-radius:12px}
+.auth{max-width:400px;margin:8vh auto 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.auth h2{margin:0 0 4px}
+.auth .btns{display:grid;gap:8px;margin-top:14px}
+.err{color:var(--danger);font-size:14px;min-height:20px;margin:8px 0 0}
+.link{background:none;border:0;color:var(--accent);padding:0;text-decoration:underline}
 dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);width:min(520px,94vw);padding:20px}
 dialog::backdrop{background:rgba(10,6,30,.6)}
 dialog h2{margin:0 0 12px}
 label{display:block;font-size:14px;font-weight:500;margin:10px 0 4px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dacts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
 .toast.on{opacity:1}
+[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
 <body>
 <main>
-  <h1>Kho tài khoản Liên Quân</h1>
-  <p class="sub">Lưu tên đăng nhập, mật khẩu, rank và ghi chú của từng tài khoản. Dữ liệu nằm trong trình duyệt của bạn.</p>
-  <div class="warn">Dữ liệu chỉ lưu trên thiết bị và trình duyệt này, không mã hóa. Hãy bấm Xuất file để sao lưu, và không dùng chung máy công cộng.</div>
+  <div id="setup" class="warn" hidden>Chưa cấu hình Firebase. Mở file index.html, tìm <b>firebaseConfig</b> ở cuối file và dán cấu hình của bạn vào.</div>
 
-  <div class="bar">
-    <input id="q" type="search" placeholder="Tìm theo tên, tài khoản, ghi chú..." aria-label="Tìm kiếm">
-    <button class="primary" id="add">Thêm tài khoản</button>
-    <button id="exp">Xuất file</button>
-    <button id="imp">Nhập file</button>
-    <input id="file" type="file" accept="application/json" hidden>
-  </div>
+  <!-- Màn hình đăng nhập -->
+  <section id="auth" class="auth" hidden>
+    <h2 id="auth-title">Đăng nhập</h2>
+    <p class="sub" style="margin:0 0 12px">Đăng nhập để xem kho tài khoản của bạn trên mọi thiết bị.</p>
+    <label for="a-email">Email</label>
+    <input id="a-email" type="email" autocomplete="email">
+    <label for="a-pass">Mật khẩu</label>
+    <input id="a-pass" type="password" autocomplete="current-password">
+    <div class="err" id="a-err" role="alert"></div>
+    <div class="btns">
+      <button class="primary" id="a-go">Đăng nhập</button>
+      <button id="a-google">Đăng nhập bằng Google</button>
+    </div>
+    <p style="margin:14px 0 0;font-size:14px"><span id="a-q">Chưa có tài khoản?</span> <button class="link" id="a-switch">Đăng ký</button></p>
+  </section>
 
-  <div id="list" class="list"></div>
+  <!-- Ứng dụng chính -->
+  <section id="app" hidden>
+    <div class="top"><div><h1>Kho tài khoản Liên Quân</h1><div class="who" id="who"></div></div><button id="out">Đăng xuất</button></div>
+    <div class="warn">Dữ liệu của bạn lưu trên Firebase và chỉ tài khoản của bạn đọc được. Mật khẩu game chưa được mã hóa thêm, không dùng chung tài khoản đăng nhập với người khác.</div>
+    <div class="bar">
+      <input id="q" type="search" placeholder="Tìm theo tên, tài khoản, ghi chú..." aria-label="Tìm kiếm">
+      <button class="primary" id="add">Thêm tài khoản</button>
+      <button id="exp">Xuất file</button>
+      <button id="imp">Nhập file</button>
+      <input id="file" type="file" accept="application/json" hidden>
+    </div>
+    <div id="list" class="list"></div>
+  </section>
 </main>
 
 <dialog id="dlg">
@@ -88,70 +111,123 @@ label{display:block;font-size:14px;font-weight:500;margin:10px 0 4px}
     <textarea id="f-note" rows="3"></textarea>
     <div class="dacts">
       <button type="button" id="cancel">Hủy</button>
-      <button class="primary" type="submit" id="save">Lưu</button>
+      <button class="primary" type="submit">Lưu</button>
     </div>
   </form>
 </dialog>
 <div class="toast" id="toast" role="status"></div>
 
-<script>
-(function(){
-  var KEY="lienquan-vault-v1", accounts=[], editId=null, shown={};
-  var $=function(id){return document.getElementById(id)};
-  function load(){try{var r=localStorage.getItem(KEY);accounts=r?JSON.parse(r):[]}catch(e){accounts=[]}if(!Array.isArray(accounts))accounts=[]}
-  function persist(){try{localStorage.setItem(KEY,JSON.stringify(accounts))}catch(e){toast("Không lưu được vào trình duyệt, hãy xuất file để sao lưu")}}
-  function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove("on")},1800)}
-  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-  function render(){
-    var q=$("q").value.trim().toLowerCase(), box=$("list");
-    var items=accounts.filter(function(a){return !q||[a.name,a.user,a.note,a.type,a.rank].join(" ").toLowerCase().indexOf(q)>-1});
-    if(!items.length){box.innerHTML='<div class="empty">'+(accounts.length?"Không có tài khoản nào khớp.":"Chưa có tài khoản nào. Bấm Thêm tài khoản để bắt đầu.")+'</div>';return}
-    box.innerHTML=items.map(function(a){
-      var pw=shown[a.id]?esc(a.pass):"••••••••";
-      var stats=[];if(a.heroes!=="")stats.push(esc(a.heroes)+" tướng");if(a.skins!=="")stats.push(esc(a.skins)+" trang phục");
-      return '<article class="acc" data-id="'+a.id+'"><header><h2>'+esc(a.name)+'</h2><span class="rank">'+esc(a.rank)+'</span></header>'+
-      '<div class="meta">Đăng nhập bằng '+esc(a.type)+(stats.length?" – "+stats.join(", "):"")+'</div>'+
-      '<div class="row"><span class="k">Tài khoản</span><code>'+(esc(a.user)||"(trống)")+'</code><button class="small" data-a="cu">Sao chép</button></div>'+
-      '<div class="row"><span class="k">Mật khẩu</span><code>'+pw+'</code><button class="small" data-a="tp">'+(shown[a.id]?"Ẩn":"Hiện")+'</button><button class="small" data-a="cp">Sao chép</button></div>'+
-      (a.note?'<p class="note">'+esc(a.note)+'</p>':"")+
-      '<div class="acts"><button class="small" data-a="ed">Sửa</button><button class="small danger" data-a="rm">Xóa</button></div></article>'}).join("")}
-  function find(id){return accounts.filter(function(a){return a.id===id})[0]}
-  function copy(t){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast("Đã sao chép")},function(){toast("Không sao chép được")})}else toast("Trình duyệt không hỗ trợ sao chép")}
-  function openForm(a){
-    editId=a?a.id:null;$("dtitle").textContent=a?"Sửa tài khoản":"Thêm tài khoản";
-    $("f-name").value=a?a.name:"";$("f-type").value=a?a.type:"Facebook";$("f-rank").value=a?a.rank:"Chưa rõ";
-    $("f-user").value=a?a.user:"";$("f-pass").value=a?a.pass:"";$("f-heroes").value=a?a.heroes:"";$("f-skins").value=a?a.skins:"";$("f-note").value=a?a.note:"";
-    $("dlg").showModal();$("f-name").focus()}
-  $("add").onclick=function(){openForm(null)};
-  $("cancel").onclick=function(){$("dlg").close()};
-  $("form").onsubmit=function(e){
-    e.preventDefault();
-    var d={name:$("f-name").value.trim(),type:$("f-type").value,rank:$("f-rank").value,user:$("f-user").value.trim(),pass:$("f-pass").value,heroes:$("f-heroes").value,skins:$("f-skins").value,note:$("f-note").value.trim()};
-    if(!d.name)return;
-    if(editId){var a=find(editId);for(var k in d)a[k]=d[k]}else{d.id="a"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);accounts.unshift(d)}
-    persist();$("dlg").close();render();toast("Đã lưu")};
-  $("list").onclick=function(e){
-    var b=e.target.closest("button");if(!b)return;
-    var id=b.closest(".acc").getAttribute("data-id"),a=find(id),act=b.getAttribute("data-a");
-    if(act==="cu")copy(a.user);
-    else if(act==="cp")copy(a.pass);
-    else if(act==="tp"){shown[id]=!shown[id];render()}
-    else if(act==="ed")openForm(a);
-    else if(act==="rm"&&confirm("Xóa tài khoản "+a.name+"?")){accounts=accounts.filter(function(x){return x.id!==id});persist();render();toast("Đã xóa")}};
-  $("q").oninput=render;
-  $("exp").onclick=function(){
-    if(!accounts.length){toast("Chưa có dữ liệu để xuất");return}
-    var blob=new Blob([JSON.stringify(accounts,null,2)],{type:"application/json"}),u=URL.createObjectURL(blob),l=document.createElement("a");
-    l.href=u;l.download="lien-quan-accounts.json";document.body.appendChild(l);l.click();l.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000)};
-  $("imp").onclick=function(){$("file").click()};
-  $("file").onchange=function(e){
-    var f=e.target.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(){try{var data=JSON.parse(r.result);if(!Array.isArray(data))throw 0;
-      data.forEach(function(x){if(x&&x.name&&!find(x.id)){x.id=x.id||"a"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);accounts.push(x)}});
-      persist();render();toast("Đã nhập file")}catch(err){toast("File không hợp lệ")}};
-    r.readAsText(f);e.target.value=""};
-  load();render();
-})();
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ===== DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (lấy ở Firebase → Project settings → Your apps) ===== */
+const firebaseConfig = {
+  apiKey: "DAN_API_KEY_VAO_DAY",
+  authDomain: "DAN_AUTH_DOMAIN_VAO_DAY",
+  projectId: "DAN_PROJECT_ID_VAO_DAY",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+/* ============================================================================================ */
+
+const $ = id => document.getElementById(id);
+const configured = !firebaseConfig.apiKey.startsWith("DAN_");
+let auth, db, uid = null, unsub = null, accounts = [], editId = null, shown = {}, registerMode = false;
+
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2000)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function copy(t){navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t).then(()=>toast("Đã sao chép"),()=>toast("Không sao chép được")):toast("Trình duyệt không hỗ trợ sao chép")}
+function authError(e){
+  const m={"auth/invalid-credential":"Sai email hoặc mật khẩu.","auth/invalid-email":"Email không hợp lệ.","auth/email-already-in-use":"Email này đã được đăng ký.","auth/weak-password":"Mật khẩu cần ít nhất 6 ký tự.","auth/popup-closed-by-user":"Bạn đã đóng cửa sổ đăng nhập.","auth/unauthorized-domain":"Tên miền chưa được thêm vào Authorized domains trong Firebase.","auth/operation-not-allowed":"Phương thức đăng nhập này chưa được bật trong Firebase.","auth/too-many-requests":"Thử quá nhiều lần, hãy đợi một lúc."};
+  return m[e.code]||("Lỗi: "+(e.code||e.message))}
+
+if(!configured){ $("setup").hidden=false; $("auth").hidden=true; }
+else{
+  auth = getAuth(initializeApp(firebaseConfig));
+  db = getFirestore();
+  onAuthStateChanged(auth, user=>{
+    if(unsub){unsub();unsub=null}
+    if(user){
+      uid=user.uid; $("auth").hidden=true; $("app").hidden=false; $("who").textContent=user.email||"";
+      unsub=onSnapshot(collection(db,"users",uid,"accounts"), snap=>{
+        accounts=snap.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        render();
+      }, e=>toast("Không đọc được dữ liệu: kiểm tra Rules của Firestore"));
+    }else{
+      uid=null; accounts=[]; $("app").hidden=true; $("auth").hidden=false;
+    }
+  });
+}
+
+/* Đăng nhập */
+function setMode(reg){registerMode=reg;$("auth-title").textContent=reg?"Đăng ký":"Đăng nhập";$("a-go").textContent=reg?"Tạo tài khoản":"Đăng nhập";$("a-q").textContent=reg?"Đã có tài khoản?":"Chưa có tài khoản?";$("a-switch").textContent=reg?"Đăng nhập":"Đăng ký";$("a-err").textContent=""}
+$("a-switch").onclick=()=>setMode(!registerMode);
+$("a-go").onclick=async()=>{
+  const e=$("a-email").value.trim(), p=$("a-pass").value; $("a-err").textContent="";
+  if(!e||!p){$("a-err").textContent="Nhập email và mật khẩu.";return}
+  try{registerMode?await createUserWithEmailAndPassword(auth,e,p):await signInWithEmailAndPassword(auth,e,p)}catch(x){$("a-err").textContent=authError(x)}};
+$("a-pass").onkeydown=e=>{if(e.key==="Enter")$("a-go").click()};
+$("a-google").onclick=async()=>{$("a-err").textContent="";try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(x){$("a-err").textContent=authError(x)}};
+$("out").onclick=()=>signOut(auth);
+
+/* Danh sách */
+function render(){
+  const q=$("q").value.trim().toLowerCase(), box=$("list");
+  const items=accounts.filter(a=>!q||[a.name,a.user,a.note,a.type,a.rank].join(" ").toLowerCase().includes(q));
+  if(!items.length){box.innerHTML='<div class="empty">'+(accounts.length?"Không có tài khoản nào khớp.":"Chưa có tài khoản nào. Bấm Thêm tài khoản để bắt đầu.")+'</div>';return}
+  box.innerHTML=items.map(a=>{
+    const pw=shown[a.id]?esc(a.pass):"••••••••", st=[];
+    if(a.heroes!==""&&a.heroes!=null)st.push(esc(a.heroes)+" tướng");
+    if(a.skins!==""&&a.skins!=null)st.push(esc(a.skins)+" trang phục");
+    return '<article class="acc" data-id="'+esc(a.id)+'"><header><h2>'+esc(a.name)+'</h2><span class="rank">'+esc(a.rank)+'</span></header>'+
+    '<div class="meta">Đăng nhập bằng '+esc(a.type)+(st.length?" – "+st.join(", "):"")+'</div>'+
+    '<div class="row"><span class="k">Tài khoản</span><code>'+(esc(a.user)||"(trống)")+'</code><button class="small" data-a="cu">Sao chép</button></div>'+
+    '<div class="row"><span class="k">Mật khẩu</span><code>'+pw+'</code><button class="small" data-a="tp">'+(shown[a.id]?"Ẩn":"Hiện")+'</button><button class="small" data-a="cp">Sao chép</button></div>'+
+    (a.note?'<p class="note">'+esc(a.note)+'</p>':"")+
+    '<div class="acts"><button class="small" data-a="ed">Sửa</button><button class="small danger" data-a="rm">Xóa</button></div></article>'}).join("")}
+const find=id=>accounts.find(a=>a.id===id);
+
+function openForm(a){
+  editId=a?a.id:null;$("dtitle").textContent=a?"Sửa tài khoản":"Thêm tài khoản";
+  $("f-name").value=a?a.name:"";$("f-type").value=a?a.type:"Facebook";$("f-rank").value=a?a.rank:"Chưa rõ";
+  $("f-user").value=a?a.user:"";$("f-pass").value=a?a.pass:"";$("f-heroes").value=a?a.heroes:"";$("f-skins").value=a?a.skins:"";$("f-note").value=a?a.note:"";
+  $("dlg").showModal();$("f-name").focus()}
+$("add").onclick=()=>openForm(null);
+$("cancel").onclick=()=>$("dlg").close();
+$("form").onsubmit=async e=>{
+  e.preventDefault();
+  const d={name:$("f-name").value.trim(),type:$("f-type").value,rank:$("f-rank").value,user:$("f-user").value.trim(),pass:$("f-pass").value,heroes:$("f-heroes").value,skins:$("f-skins").value,note:$("f-note").value.trim()};
+  if(!d.name)return;
+  const id=editId||doc(collection(db,"users",uid,"accounts")).id;
+  d.createdAt=editId?(find(editId).createdAt||Date.now()):Date.now();
+  try{await setDoc(doc(db,"users",uid,"accounts",id),d);$("dlg").close();toast("Đã lưu")}catch(x){toast("Không lưu được: kiểm tra Rules của Firestore")}};
+$("list").onclick=async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  const id=b.closest(".acc").dataset.id,a=find(id),act=b.dataset.a;
+  if(act==="cu")copy(a.user);
+  else if(act==="cp")copy(a.pass);
+  else if(act==="tp"){shown[id]=!shown[id];render()}
+  else if(act==="ed")openForm(a);
+  else if(act==="rm"&&confirm("Xóa tài khoản "+a.name+"?")){try{await deleteDoc(doc(db,"users",uid,"accounts",id));toast("Đã xóa")}catch(x){toast("Không xóa được")}}};
+$("q").oninput=render;
+
+/* Xuất / nhập */
+$("exp").onclick=()=>{
+  if(!accounts.length){toast("Chưa có dữ liệu để xuất");return}
+  const blob=new Blob([JSON.stringify(accounts.map(({id,...r})=>r),null,2)],{type:"application/json"}),u=URL.createObjectURL(blob),l=document.createElement("a");
+  l.href=u;l.download="lien-quan-accounts.json";document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+$("imp").onclick=()=>$("file").click();
+$("file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=async()=>{try{
+    const data=JSON.parse(r.result);if(!Array.isArray(data))throw 0;
+    const batch=writeBatch(db);let n=0;
+    data.slice(0,400).forEach(x=>{if(x&&x.name){const {id,...rest}=x;rest.createdAt=rest.createdAt||Date.now();batch.set(doc(collection(db,"users",uid,"accounts")),rest);n++}});
+    await batch.commit();toast("Đã nhập "+n+" tài khoản")}catch(err){toast("File không hợp lệ")}};
+  r.readAsText(f);e.target.value=""};
 </script>
 </body>
 </html>
